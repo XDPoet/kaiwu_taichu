@@ -10,7 +10,7 @@ learner_train_by_while_true = true
 learner_train_sleep_seconds = 0.0001
 # Replay buffer configurations
 # 下面是replay buffer的相关配置
-replay_buffer_capacity = 10000
+replay_buffer_capacity = 100000
 preload_ratio = 1
 
 # Input dimension for reverb samples on learner (varies by algorithm)

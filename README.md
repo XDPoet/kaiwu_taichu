@@ -20,3 +20,9 @@
 
 # 版本更新日志
 请见[CHANGELOG.md](./CHANGELOG.md)
+
+# 加载已有模型方法
+以具身赛道为例
+1. 将训练保存的`backup_model/`文件夹下的`*.zip`压缩包解压出来, 找到`ckpt/model.ckpt-*.pkl`文件, 复制到[`code/ckpt`](./rob_prelim/code/ckpt)下
+2. 修改[`conf/configure_app.toml`](./rob_prelim/code/conf/configure_app.toml)文件中的`preload_model = true`, `preload_model_id = *`（这个`*`就是上面`model.ckpt-*.pkl`中的数字）
+3. 正常启动训练即可, 在训练日志的`aisrv.log`中可以看到`First load model <model_file_path> and update target q successfully`就说明加载成功了

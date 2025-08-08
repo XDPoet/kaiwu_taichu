@@ -43,7 +43,9 @@ class Agent(BaseAgent):
         self.win_history.append(is_win)
         if len(self.win_history) > 100:
             self.win_history.pop(0)
-        return sum(self.win_history) / len(self.win_history) if len(self.win_history) > 10 else 0
+        win_rate = sum(self.win_history) / len(self.win_history) if len(self.win_history) > 10 else 0
+        self.state_manager.win_rate = win_rate
+        return win_rate
 
     def reset(self):
         self.state_manager.reset()

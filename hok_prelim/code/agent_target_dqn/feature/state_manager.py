@@ -352,6 +352,7 @@ class StateManager:
         self.treasures = [OrganManager('treasure', i+1) for i in range(13)]
         self.map_manager = MapManager()
         self.buff_count = 0
+        self.win_rate = 0.0  # 在agent.update_win_rate中每个epsiode结束后更新
         # FOR DEBUG
         self.total_reward = 0
         self.total_treasure_get = 0
@@ -414,12 +415,14 @@ class StateManager:
             # 终点奖励
             r += cfg.REW_FINISH
         if self.truncated:
-            r -= cfg.REW_FINISH
-        # 2. 惩罚没有得到的宝箱 (超时终止不考虑宝箱)
+            r -= cfg.REW_TRUNCATED_PUNISH
+        # 2. 惩罚没有得到的宝箱
         if self.terminated or self.truncated:
+            rew_miss_treasures = 0
             for treasure in self.treasures:
                 if treasure.pos[0] != -1 and treasure.available:  # 遗漏的宝箱
-                    r -= cfg.REW_TREASURE
+                    rew_miss_treasures -= cfg.REW_TREASURE
+            r += rew_miss_treasures * self.win_rate  # 胜率越高, 惩罚比例越大
         # 3. 闪现距离惩罚(官方写闪现距离为16个单位)
         use_flash = self.last_action >= 8
         if use_flash:

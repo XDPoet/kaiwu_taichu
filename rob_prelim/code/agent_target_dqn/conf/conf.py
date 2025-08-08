@@ -85,7 +85,7 @@ class Config:
 
     #################### 奖励 ####################
     REW_FINISH = 15  # 到终点奖励
-    REW_TRUNCATED_PUNISH = -80  # 截断惩罚
+    REW_TRUNCATED_PUNISH = 80  # 截断惩罚
     REW_TREASURE = 10  # 获得宝箱奖励, 到终点但错失的宝箱就是惩罚
     REW_FLASH = 0.1  # 闪现距离减15乘系数并对奖励做clip(-5, 0)范围
     REW_DISTANCE = 0.1  # 距离奖励向目标 (终点) 移动 (每一帧进行一次奖励)
