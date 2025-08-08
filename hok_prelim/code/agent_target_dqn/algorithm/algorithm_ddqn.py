@@ -16,7 +16,6 @@ from copy import deepcopy
 from agent_target_dqn.model.model import Model
 from agent_target_dqn.conf.conf import Config
 from agent_target_dqn.feature.definition import ActData
-from agent_target_dqn.model.simbaV2.agents.networks import l2normalize_network
 
 
 class Algorithm:
@@ -66,26 +65,25 @@ class Algorithm:
         batch_feature = self.__convert_to_tensor(batch_feature_vec)
         _batch_feature = self.__convert_to_tensor(_batch_feature_vec)
 
+        model = getattr(self, "target_model")
+        model.eval()
+        with torch.no_grad():
+            q = model(_batch_feature)
+            q = q.masked_fill(~_batch_obs_legal, float(torch.min(q)))
+            q_max = q.max(dim=1).values.detach()
+
+        target_q = rew + self._gamma * q_max * not_done
+
         self.optim.zero_grad()
 
         model = getattr(self, "model")
         model.train()
-        target_model = getattr(self, "target_model")
-        target_model.eval()
-
-        with torch.no_grad():
-            q = model(_batch_feature)
-            q = q.masked_fill(~_batch_obs_legal, float(torch.min(q)))
-            q_t = target_model(_batch_feature)
-            q_max = q_t.gather(dim=-1, index=q.argmax(dim=-1, keepdim=True)).squeeze(-1).detach()
-        
         logits = model(batch_feature)
-        target_q = rew + self._gamma * q_max * not_done
+
         loss = torch.square(target_q - logits.gather(1, batch_action).view(-1)).mean()
         loss.backward()
         model_grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         self.optim.step()
-        l2normalize_network(model.simba_critic)
 
         self.train_step += 1
 
@@ -173,7 +171,7 @@ class Algorithm:
                 self.monitor.put_data({os.getpid(): monitor_data})
 
             self.last_report_monitor_time = now
-            
+
         return [ActData(move_dir=i[0], use_talent=i[1]) for i in format_action]
 
     def update_target_q(self):

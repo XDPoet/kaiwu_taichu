@@ -14,8 +14,7 @@ from torch import nn
 import torch.nn.functional as F
 from typing import List
 from agent_target_dqn.conf.conf import Config
-from agent_target_dqn.model.simbaV2.agents.networks import SimbaV2Critic, l2normalize_network
-import math
+
 import sys
 import os
 
@@ -52,33 +51,19 @@ class Model(nn.Module):
         )
         # self.mlp = MLP([512 + 5, 256, action_shape], "mlp")
         # self.mlp = MLP([11*11, 128, action_shape], "mlp")
-        # self.mlp = nn.Sequential(
-        #     MLP([512 + Config.HERO_FEATURE_DIM, 256], "mlp", non_linearity_last=True),
-        #     # ResidualBlock(256),
-        #     MLP([256, action_shape], "mlp")
-        # )
-        simba_hidden_dim = 512
-        simba_num_block = 2
-        self.simba_critic = SimbaV2Critic(in_dim=512 + Config.HERO_FEATURE_DIM,
-                                        num_blocks=simba_num_block,
-                                        hidden_dim=simba_hidden_dim,
-                                        scaler_init=math.sqrt(2 / simba_hidden_dim),
-                                        scaler_scale=math.sqrt(2 / simba_hidden_dim),
-                                        alpha_init=1 / (simba_num_block + 1),
-                                        alpha_scale=1 / math.sqrt(simba_hidden_dim),
-                                        c_shift=3.0,
-                                        num_bins=action_shape
-                                        )
-        l2normalize_network(self.simba_critic)
-        
+        self.mlp = nn.Sequential(
+            MLP([512 + Config.HERO_FEATURE_DIM, 256], "mlp", non_linearity_last=True),
+            # ResidualBlock(256),
+            MLP([256, action_shape], "mlp")
+        )
+
     # Forward inference
     # 前向推理
     def forward(self, feature):
         x, map = feature[:, :Config.HERO_FEATURE_DIM], feature[:, Config.HERO_FEATURE_DIM:].reshape(-1, *Config.MAP_FEATURE_SHAPE)
         # Action and value processing
-        # logits = self.mlp(torch.cat([self.q_cnn(map), x], dim=1))
+        logits = self.mlp(torch.cat([self.q_cnn(map), x], dim=1))
         # logits = self.mlp(feature)
-        logits = self.simba_critic(torch.cat([self.q_cnn(map), x], dim=1) + 1e-8) # prevent zero vector
         return logits
 
 def make_fc_layer(in_features: int, out_features: int, init_method: str = 'orthogonal'):

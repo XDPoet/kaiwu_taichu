@@ -422,7 +422,8 @@ class StateManager:
             for treasure in self.treasures:
                 if treasure.pos[0] != -1 and treasure.available:  # 遗漏的宝箱
                     rew_miss_treasures -= cfg.REW_TREASURE
-            r += rew_miss_treasures * self.win_rate  # 胜率越高, 惩罚比例越大
+            # r += rew_miss_treasures * self.win_rate  # 胜率越高, 惩罚比例越大
+            r += rew_miss_treasures
         # 3. 闪现距离惩罚(官方写闪现距离为16个单位)
         use_flash = self.last_action >= 8
         if use_flash:

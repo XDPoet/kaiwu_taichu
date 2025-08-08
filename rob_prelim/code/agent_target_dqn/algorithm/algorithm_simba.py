@@ -66,21 +66,21 @@ class Algorithm:
         batch_feature = self.__convert_to_tensor(batch_feature_vec)
         _batch_feature = self.__convert_to_tensor(_batch_feature_vec)
 
+        model = getattr(self, "target_model")
+        model.eval()
+        with torch.no_grad():
+            q = model(_batch_feature)
+            q = q.masked_fill(~_batch_obs_legal, float(torch.min(q)))
+            q_max = q.max(dim=1).values.detach()
+
+        target_q = rew + self._gamma * q_max * not_done
+
         self.optim.zero_grad()
 
         model = getattr(self, "model")
         model.train()
-        target_model = getattr(self, "target_model")
-        target_model.eval()
-
-        with torch.no_grad():
-            q = model(_batch_feature)
-            q = q.masked_fill(~_batch_obs_legal, float(torch.min(q)))
-            q_t = target_model(_batch_feature)
-            q_max = q_t.gather(dim=-1, index=q.argmax(dim=-1, keepdim=True)).squeeze(-1).detach()
-        
         logits = model(batch_feature)
-        target_q = rew + self._gamma * q_max * not_done
+
         loss = torch.square(target_q - logits.gather(1, batch_action).view(-1)).mean()
         loss.backward()
         model_grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)

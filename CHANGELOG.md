@@ -199,6 +199,16 @@ v0.9已经能稳定到达终点, 但宝箱总是少一个收集, 需要改奖励
 2. replay buff增大到`1e4 -> 1e5`
 3. 错失宝箱惩罚乘上当前胜率系数
 
+### v1.3 (only rob_prelim)
+1. 加入simbaV2和ddqn实现(未实装，需要自行修改algorithm_simba_ddqn.py和model_simba.py为algorithm.py和model.py)
+2. max_step调整为2000
+
+### v1.3 (only hok_prelim)
+1. 加入simbaV2和ddqn实现
+2. max_step调味2000
+3. gamma: 0.9 -> 0.995
+4. 删除miss宝箱的胜率系数 (可能导致宝箱没完全获取)
+
 ## 去年的一些设计
 ### 去年的状态设计
 ```python
