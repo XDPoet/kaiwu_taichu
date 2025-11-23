@@ -1,10 +1,11 @@
 # 开悟2025比赛
 > 本仓库同时包含王者和具身的比赛代码
 
-| 仓库名 | 介绍 |
-| - | - |
-| [`hok_prelim`](./hok_prelim/) | 王者(高级)初赛 |
-| [`rob_prelim`](./rob_prelim/) | 具身初赛 |
+| 仓库名 | 介绍 | 名次 |
+| - | - | - |
+| [`hok_prelim`](./hok_prelim/) | 王者(高级)初赛 | 41 |
+| [`rob_prelim`](./rob_prelim/) | 具身初赛 | 11 |
+| [`hok_semi`](./hok_semi/) | 王者(高级)复赛 | 1 |
 
 ## 王者/具身初赛
 两个比赛题目基本一致，但是版本名和版本上存在小差别
@@ -20,6 +21,9 @@
 
 # 版本更新日志
 请见[CHANGELOG.md](./CHANGELOG.md)
+
+## 王者复赛
+日志请见[hok_semi/README.md](./hok_semi/README.md)
 
 # 加载已有模型方法
 以具身赛道为例
