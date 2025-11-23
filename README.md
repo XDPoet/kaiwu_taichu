@@ -6,6 +6,9 @@
 | [`hok_prelim`](./hok_prelim/) | 王者(高级)初赛 | 41 |
 | [`rob_prelim`](./rob_prelim/) | 具身初赛 | 11 |
 | [`hok_semi`](./hok_semi/) | 王者(高级)复赛 | 1 |
+| `hok_final` (未开源) | 王者(高级)决赛| 4 |
+
+> hok_final成绩较差, 代码实现应该存在问题, 仍需改进, 先不开源了
 
 ## 王者/具身初赛
 两个比赛题目基本一致，但是版本名和版本上存在小差别
@@ -19,8 +22,7 @@
 
 最后比赛的配置均为: 随机8个宝箱、buff、起点、终点位置，随机障碍物，最大步数2000
 
-# 版本更新日志
-请见[CHANGELOG.md](./CHANGELOG.md)
+更新日志见[CHANGELOG.md](./CHANGELOG.md)
 
 ## 王者复赛
 日志请见[hok_semi/README.md](./hok_semi/README.md)
