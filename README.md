@@ -7,8 +7,10 @@
 | [`rob_prelim`](./rob_prelim/) | 具身初赛 | 11 |
 | [`hok_semi`](./hok_semi/) | 王者(高级)复赛 | 1 |
 | `hok_final` (未开源) | 王者(高级)决赛| 4 |
+| [`rob_final`](https://github.com/wty-yy/go2_rl_gym) | 具身决赛 | 1 |
 
 > hok_final成绩较差, 代码实现应该存在问题, 仍需改进, 先不开源了
+> rob_final代码全部在isaacgym中实现，开源在[go2_rl_gym](https://github.com/wty-yy/go2_rl_gym)，包含训练、验证、部署代码
 
 ## 王者/具身初赛
 两个比赛题目基本一致，但是版本名和版本上存在小差别
